@@ -1,0 +1,137 @@
+
+#include <stdio.h>
+
+int main()
+{
+    int a[10][10], b[10][10];
+    int s1[100][3], s2[100][3], result[100][3];
+    int r1, c1, r2, c2;
+    int i, j, k;
+    int n1 = 0, n2 = 0, n3 = 0;
+    int row, col, value, found;
+
+    printf("Enter rows and columns of first matrix: ");
+    scanf("%d %d", &r1, &c1);
+
+    printf("Enter rows and columns of second matrix: ");
+    scanf("%d %d", &r2, &c2);
+
+    if (c1 != r2)
+    {
+        printf("Matrix multiplication is not possible.");
+        return 0;
+    }
+
+    printf("Enter elements of first matrix:\n");
+    for (i = 0; i < r1; i++)
+    {
+        for (j = 0; j < c1; j++)
+        {
+            scanf("%d", &a[i][j]);
+        }
+    }
+
+    printf("Enter elements of second matrix:\n");
+    for (i = 0; i < r2; i++)
+    {
+        for (j = 0; j < c2; j++)
+        {
+            scanf("%d", &b[i][j]);
+        }
+    }
+
+    // Convert first matrix into triplet form
+    for (i = 0; i < r1; i++)
+    {
+        for (j = 0; j < c1; j++)
+        {
+            if (a[i][j] != 0)
+            {
+                s1[n1][0] = i;
+                s1[n1][1] = j;
+                s1[n1][2] = a[i][j];
+                n1++;
+            }
+        }
+    }
+
+    // Convert second matrix into triplet form
+    for (i = 0; i < r2; i++)
+    {
+        for (j = 0; j < c2; j++)
+        {
+            if (b[i][j] != 0)
+            {
+                s2[n2][0] = i;
+                s2[n2][1] = j;
+                s2[n2][2] = b[i][j];
+                n2++;
+            }
+        }
+    }
+
+    // Multiply the matrices
+    for (i = 0; i < n1; i++)
+    {
+        for (j = 0; j < n2; j++)
+        {
+            if (s1[i][1] == s2[j][0])
+            {
+                row = s1[i][0];
+                col = s2[j][1];
+                value = s1[i][2] * s2[j][2];
+
+                found = 0;
+
+                for (k = 0; k < n3; k++)
+                {
+                    if (result[k][0] == row &&
+                        result[k][1] == col)
+                    {
+                        result[k][2] += value;
+                        found = 1;
+                        break;
+                    }
+                }
+
+                if (found == 0)
+                {
+                    result[n3][0] = row;
+                    result[n3][1] = col;
+                    result[n3][2] = value;
+                    n3++;
+                }
+            }
+        }
+    }
+
+    printf("\nFirst Sparse Matrix:\n");
+    printf("Row\tColumn\tValue\n");
+
+    for (i = 0; i < n1; i++)
+    {
+        printf("%d\t%d\t%d\n", s1[i][0], s1[i][1], s1[i][2]);
+    }
+
+    printf("\nSecond Sparse Matrix:\n");
+    printf("Row\tColumn\tValue\n");
+
+    for (i = 0; i < n2; i++)
+    {
+        printf("%d\t%d\t%d\n", s2[i][0], s2[i][1], s2[i][2]);
+    }
+
+    printf("\nResultant Sparse Matrix:\n");
+    printf("Row\tColumn\tValue\n");
+
+    for (i = 0; i < n3; i++)
+    {
+        if (result[i][2] != 0)
+        {
+            printf("%d\t%d\t%d\n",
+                   result[i][0], result[i][1], result[i][2]);
+        }
+    }
+
+    return 0;
+}
